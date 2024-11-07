@@ -1,8 +1,7 @@
 #include "SoftwareSerial.h"// import the serial library
  
 SoftwareSerial mySerial(0, 1); // RX, TX
-String data = "Test :)";
-int BluetoothData;
+int data = 10000;
 
 void setup() 
 {
@@ -15,13 +14,13 @@ void setup()
 void loop() 
 {
   // put your main code here, to run repeatedly:
-  if (Serial.available())
-  {
-    BluetoothData = Serial.read();
-    if(BluetoothData=='1')
-    {   
-     mySerial.write("Test 1 \n");
-    }
+  char str[5];
+  sprintf(str, "%d", data);
+  for(int i = 0; i < 5; i++){
+    mySerial.write(str[i]);
   }
-delay(100);// prepare for next data ...
+  mySerial.write("\n");
+  delay(100);// prepare for next data ...
+  data++;
+  if(data > 19999) data = 10000;
 }
