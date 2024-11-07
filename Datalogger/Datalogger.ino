@@ -78,17 +78,19 @@ void loop()
   }
 
   // open the file.
-  File dataFile = SD.open("datalog.txt", FILE_WRITE);
+  File dataFile = SD.open("datalog.csv", FILE_WRITE);
 
   // if the file is available, write to it:
   if (dataFile) {
-    dataFile.println(dataString);
+    dataFile.print(dataString);
+    dataFile.print(",");
+    dataFile.println("test");
     dataFile.close();
     // print to the serial port too:
     Serial.println(dataString);
   } else {
     // if the file isn't open, pop up an error:
-    Serial.println("error opening datalog.txt");
+    Serial.println("error opening datalog.csv");
   }
   delay(100); // run at a reasonable not-too-fast speed
 }
