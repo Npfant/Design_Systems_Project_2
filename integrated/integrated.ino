@@ -10,7 +10,7 @@ SoftwareSerial gpsSerial(15, 14);
 Adafruit_BNO055 bno = Adafruit_BNO055();
 sensors_event_t event;
 
-float accelX = -1; float accelY = 0; float accelZ = -1;
+float accelX = -1; float accelY = 0; float accelZ = 1;
 float gyroX = -1; float gyroY = -1; float gyroZ = -1;
 float magX = -1; float magY = -1; float magZ = -1;
 float lng = -1; float lat = -1;
@@ -22,10 +22,10 @@ void setup()
   Serial.begin(115200);
   Serial.println("Initializing");
   // put your setup code here, to run once:
-  mySerial.begin(115200);
-  gpsSerial.begin(115200);
+  mySerial.begin(9600);
+  gpsSerial.begin(9600);
   if (!bno.begin()) {
-    Serial.print("Couldn't find the BNO055 sensor!");
+    Serial.println("Couldn't find the BNO055 sensor!");
   }
   else {
     Serial.println("BNO055 Sensor Initialized!");
@@ -61,7 +61,6 @@ void portPrint(float x){
 void loop() 
 {
   // put your main code here, to run repeatedly:
-  if(bno.begin()){
     bno.getEvent(&event, Adafruit_BNO055::VECTOR_ACCELEROMETER);
     accelX = event.acceleration.x;
     accelY = event.acceleration.y;
@@ -80,7 +79,7 @@ void loop()
     magZ = event.magnetic.z;
 
     // Print the data to the Serial Monitor
-    Serial.print("Acceleration (m/s²) X: ");
+    /*Serial.print("Acceleration (m/s²) X: ");
     Serial.print(accelX, 4);
     Serial.print(" Y: ");
     Serial.print(accelY, 4);
@@ -99,8 +98,7 @@ void loop()
     Serial.print(" Y: ");
     Serial.print(magY, 4);
     Serial.print(" Z: ");
-    Serial.println(magZ, 4);
-  }
+    Serial.println(magZ, 4);*/
 
   if (gpsSerial.available() > 0) {
     gps.encode(gpsSerial.read()); // Parse each character
@@ -139,19 +137,24 @@ void loop()
     }
   }
 
-  Serial.println("Start");
+  accelX = -1; accelY = 0; accelZ = 1;
+  gyroX = 2; gyroY = 3; gyroZ = 4;
+  magX = 5; magY = 6; magZ = 7;
+  lng = 9; lat = 8;
+
+  Serial.println("S");
+  mySerial.println("S");
   portPrint(accelX);
   portPrint(accelY);
-  //portPrint(accelZ);
-  //portPrint(gyroX);
-  //portPrint(gyroY);
-  //portPrint(gyroZ);
-  //portPrint(magX);
-  //portPrint(magY);
-  //portPrint(magZ);
-  //portPrint(lat);
-  //portPrint(lng);
-  Serial.println("End");
+  portPrint(accelZ);
+  portPrint(gyroX);
+  portPrint(gyroY);
+  portPrint(gyroZ);
+  portPrint(magX);
+  portPrint(magY);
+  portPrint(magZ);
+  portPrint(lat);
+  portPrint(lng);
 
-  delay(100);// prepare for next data ...
+  delay(1);
 }
