@@ -3,12 +3,15 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <TinyGPSPlus.h>
+#include <SD.h>
+#include <SPI.h>
  
 SoftwareSerial mySerial(0, 1); // RX, TX
 TinyGPSPlus gps;
 SoftwareSerial gpsSerial(15, 14);
 Adafruit_BNO055 bno = Adafruit_BNO055();
 sensors_event_t event;
+const int chipSelect = BUILTIN_SDCARD;
 
 float accelX = -1; float accelY = 0; float accelZ = 1;
 float gyroX = -1; float gyroY = -1; float gyroZ = -1;
@@ -30,7 +33,28 @@ void setup()
   else {
     Serial.println("BNO055 Sensor Initialized!");
   }
+  if (!SD.begin(chipSelect)) {
+    Serial.println("SD Card failed, or not present");
+  }
+  else {
+    Serial.println("SD Card Initialized!");
+  }
   bno.setExtCrystalUse(true);
+
+  File dataFile = SD.open("datalog.csv", FILE_WRITE);
+
+  // if the file is available, write to it:
+  if (dataFile) {
+    dataFile.print("Date"); dataFile.print(","); dataFile.print("Time"); dataFile.print(","); 
+    dataFile.print("X Acceleration"); dataFile.print(","); dataFile.print("Y Acceleration"); dataFile.print(","); dataFile.print("Z Acceleration"); dataFile.print(",");
+    dataFile.print("X Angular Velocity"); dataFile.print(","); dataFile.print("Y Angular Velocity"); dataFile.print(","); dataFile.print("Z Angular Velocity"); dataFile.print(",");
+    dataFile.print("X Magnetic Field"); dataFile.print(","); dataFile.print("Y Magnetic Field"); dataFile.print(","); dataFile.print("Z Magnetic Field"); dataFile.print(",");
+    dataFile.print("Latitude"); dataFile.print(","); dataFile.println("Longitude");
+    dataFile.close();
+  } else {
+    // if the file isn't open, pop up an error:
+    Serial.println("Error opening datalog.csv");
+  }
 }
 
 float lenHelper(float x) {
@@ -136,11 +160,11 @@ void loop()
       Serial.println(sec);
     }
   }
-
+  hour = 10; minute = 11; sec = 32;
   accelX = -1; accelY = 0; accelZ = 1;
   gyroX = 2; gyroY = 3; gyroZ = 4;
   magX = 5; magY = 6; magZ = 7;
-  lng = 9; lat = 8;
+  lat = 8; lng = 9;
 
   Serial.println("S");
   mySerial.println("S");
@@ -155,6 +179,23 @@ void loop()
   portPrint(magZ);
   portPrint(lat);
   portPrint(lng);
+
+  File dataFile = SD.open("datalog.csv", FILE_WRITE);
+
+  // if the file is available, write to it:
+  if (dataFile) {
+    dataFile.print(month); dataFile.print("/"); dataFile.print(day); dataFile.print("/"); dataFile.print(year); dataFile.print(",");
+    dataFile.print(hour); dataFile.print(":"); dataFile.print(minute); dataFile.print(":"); dataFile.print(sec); dataFile.print(",");
+    dataFile.print(accelX); dataFile.print(","); dataFile.print(accelY); dataFile.print(","); dataFile.print(accelZ); dataFile.print(",");
+    dataFile.print(gyroX); dataFile.print(","); dataFile.print(gyroY); dataFile.print(","); dataFile.print(gyroZ); dataFile.print(",");
+    dataFile.print(magX); dataFile.print(","); dataFile.print(magY); dataFile.print(","); dataFile.print(magZ); dataFile.print(",");
+    dataFile.print(lat); dataFile.print(","); dataFile.println(lng);
+
+    dataFile.close();
+  } else {
+    // if the file isn't open, pop up an error:
+    Serial.println("Error opening datalog.csv");
+  }
 
   delay(1);
 }
