@@ -46,9 +46,9 @@ void setup()
   // if the file is available, write to it:
   if (dataFile) {
     dataFile.print("Date"); dataFile.print(","); dataFile.print("Time"); dataFile.print(","); 
-    dataFile.print("X Acceleration"); dataFile.print(","); dataFile.print("Y Acceleration"); dataFile.print(","); dataFile.print("Z Acceleration"); dataFile.print(",");
-    dataFile.print("X Angular Velocity"); dataFile.print(","); dataFile.print("Y Angular Velocity"); dataFile.print(","); dataFile.print("Z Angular Velocity"); dataFile.print(",");
-    dataFile.print("X Magnetic Field"); dataFile.print(","); dataFile.print("Y Magnetic Field"); dataFile.print(","); dataFile.print("Z Magnetic Field"); dataFile.print(",");
+    dataFile.print("X Acceleration (m/s²)"); dataFile.print(","); dataFile.print("Y Acceleration (m/s²)"); dataFile.print(","); dataFile.print("Z Acceleration (m/s²)"); dataFile.print(",");
+    dataFile.print("X Angular Velocity (rad/s)"); dataFile.print(","); dataFile.print("Y Angular Velocity (rad/s)"); dataFile.print(","); dataFile.print("Z Angular Velocity (rad/s)"); dataFile.print(",");
+    dataFile.print("X Magnetic Field (µT)"); dataFile.print(","); dataFile.print("Y Magnetic Field (µT)"); dataFile.print(","); dataFile.print("Z Magnetic Field (µT)"); dataFile.print(",");
     dataFile.print("Latitude"); dataFile.print(","); dataFile.println("Longitude");
     dataFile.close();
   } else {
@@ -160,11 +160,6 @@ void loop()
       Serial.println(sec);
     }
   }
-  hour = 10; minute = 11; sec = 32;
-  accelX = -1; accelY = 0; accelZ = 1;
-  gyroX = 2; gyroY = 3; gyroZ = 4;
-  magX = 5; magY = 6; magZ = 7;
-  lat = 8; lng = 9;
 
   Serial.println("S");
   mySerial.println("S");
@@ -197,5 +192,5 @@ void loop()
     Serial.println("Error opening datalog.csv");
   }
 
-  delay(1);
+  delay(200);
 }

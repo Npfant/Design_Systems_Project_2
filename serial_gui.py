@@ -14,13 +14,13 @@ home = [[sg.Button("Start Display", button_color="green"), sg.Button("End Sessio
 dataDisplay = [
     [sg.Button("End Display", button_color="red")],
     [sg.Text("Location Data", justification="center", font=('Arial Bold', 20))],
-    [sg.Text("X Acceleration: ", justification="left"), sg.Text(x, key='accelX'), sg.Text("Y Acceleration: ", justification="center"), sg.Text(x, key='accelY'), sg.Text("Z Acceleration: ", justification="right"), sg.Text(x, key='accelZ')],
+    [sg.Text("X Acceleration (m/s²): ", justification="left"), sg.Text(x, key='accelX'), sg.Text("Y Acceleration (m/s²): ", justification="center"), sg.Text(x, key='accelY'), sg.Text("Z Acceleration (m/s²): ", justification="right"), sg.Text(x, key='accelZ')],
     #[sg.Text("Y Acceleration: ", justification="left"), sg.Text(x, key='accelY')],
     #[sg.Text("Z Acceleration: ", justification="left"), sg.Text(x, key='accelZ')],
-    [sg.Text("X Rotation: ", justification="left"), sg.Text(x, key='gyroX'), sg.Text("Y Rotation: ", justification="left"), sg.Text(x, key='gyroY'), sg.Text("Z Rotation: ", justification="left"), sg.Text(x, key='gyroZ')],
+    [sg.Text("X Angular Velocity (rad/s): ", justification="left"), sg.Text(x, key='gyroX'), sg.Text("Y Angular Velocity (rad/s): ", justification="left"), sg.Text(x, key='gyroY'), sg.Text("Z Angular Force (rad/s): ", justification="left"), sg.Text(x, key='gyroZ')],
     #[sg.Text("Y Rotation: ", justification="left"), sg.Text(x, key='gyroY')],
     #[sg.Text("Z Rotation: ", justification="left"), sg.Text(x, key='gyroZ')],
-    [sg.Text("X Magnetic Field: ", justification="left"), sg.Text(x, key='magX'), sg.Text("Y Magnetic Field: ", justification="left"), sg.Text(x, key='magY'), sg.Text("Z Magnetic Field: ", justification="left"), sg.Text(x, key='magZ')],
+    [sg.Text("X Magnetic Field (µT): ", justification="left"), sg.Text(x, key='magX'), sg.Text("Y Magnetic Field (µT): ", justification="left"), sg.Text(x, key='magY'), sg.Text("Z Magnetic Field (µT): ", justification="left"), sg.Text(x, key='magZ')],
     #[sg.Text("Y Magnetic Field: ", justification="left"), sg.Text(x, key='magY')],
     #[sg.Text("Z Magnetic Field: ", justification="left"), sg.Text(x, key='magZ')],
     [sg.Text("Latitude: ", justification="left"), sg.Text(x, key='lat'), sg.Text("Longitude: ", justification="left"), sg.Text(x, key='lng')]]
@@ -52,7 +52,7 @@ while True:
             else:
                 s = s + str(chr(b))
         x = s
-        print(x)
+        #print(x)
         if count == 1:
             window['accelX'].update(x)
         elif count == 2:
