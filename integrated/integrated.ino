@@ -16,9 +16,10 @@ const int chipSelect = BUILTIN_SDCARD;
 float accelX = -1; float accelY = 0; float accelZ = 1;
 float gyroX = -1; float gyroY = -1; float gyroZ = -1;
 float magX = -1; float magY = -1; float magZ = -1;
-float lng = -1; float lat = -1;
+float lng = -1; float lat = -1; float alt = -1;
 float month = -1; float day = -1; float year = -1;
 float hour = -1; float minute = -1; float sec = -1;
+float sat = -1;
 
 void setup() 
 {
@@ -49,7 +50,7 @@ void setup()
     dataFile.print("X Acceleration (m/s²)"); dataFile.print(","); dataFile.print("Y Acceleration (m/s²)"); dataFile.print(","); dataFile.print("Z Acceleration (m/s²)"); dataFile.print(",");
     dataFile.print("X Angular Velocity (rad/s)"); dataFile.print(","); dataFile.print("Y Angular Velocity (rad/s)"); dataFile.print(","); dataFile.print("Z Angular Velocity (rad/s)"); dataFile.print(",");
     dataFile.print("X Magnetic Field (µT)"); dataFile.print(","); dataFile.print("Y Magnetic Field (µT)"); dataFile.print(","); dataFile.print("Z Magnetic Field (µT)"); dataFile.print(",");
-    dataFile.print("Latitude"); dataFile.print(","); dataFile.println("Longitude");
+    dataFile.print("Latitude"); dataFile.print(","); dataFile.print("Longitude"); dataFile.print(","); dataFile.print("Altitude"); dataFile.print(","); dataFile.println("Satellites");
     dataFile.close();
   } else {
     // if the file isn't open, pop up an error:
@@ -129,12 +130,13 @@ void loop()
 
       // Check if location data is valid
     if (gps.location.isUpdated()) {
-      Serial.print("Latitude: ");
+      //Serial.print("Latitude: ");
       lat = gps.location.lat();
-      Serial.println(lat, 6);  // Latitude with 6 decimal places
-      Serial.print("Longitude: ");
+      //Serial.println(lat, 6);  // Latitude with 6 decimal places
+     // Serial.print("Longitude: ");
       lng = gps.location.lng();
-      Serial.println(lng, 6);  // Longitude with 6 decimal places
+      //Serial.println(lng, 6);  // Longitude with 6 decimal places
+      alt = gps.altitude.meters();
     }
 
       // Check if date and time data is valid
@@ -159,10 +161,15 @@ void loop()
       sec = gps.time.second();
       Serial.println(sec);
     }
+
+    if(gps.satellites.isUpdated()){
+      sat = (float)gps.satellites.value();
+    }
   }
 
   Serial.println("S");
   mySerial.println("S");
+  portPrint(sat);
   portPrint(accelX);
   portPrint(accelY);
   portPrint(accelZ);
@@ -174,6 +181,7 @@ void loop()
   portPrint(magZ);
   portPrint(lat);
   portPrint(lng);
+  portPrint(alt);
 
   File dataFile = SD.open("datalog.csv", FILE_WRITE);
 
@@ -184,7 +192,7 @@ void loop()
     dataFile.print(accelX); dataFile.print(","); dataFile.print(accelY); dataFile.print(","); dataFile.print(accelZ); dataFile.print(",");
     dataFile.print(gyroX); dataFile.print(","); dataFile.print(gyroY); dataFile.print(","); dataFile.print(gyroZ); dataFile.print(",");
     dataFile.print(magX); dataFile.print(","); dataFile.print(magY); dataFile.print(","); dataFile.print(magZ); dataFile.print(",");
-    dataFile.print(lat); dataFile.print(","); dataFile.println(lng);
+    dataFile.print(lat); dataFile.print(","); dataFile.print(lng); dataFile.print(","); dataFile.print(alt); dataFile.print(","); dataFile.println(sat);
 
     dataFile.close();
   } else {

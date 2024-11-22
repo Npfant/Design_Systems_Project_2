@@ -14,6 +14,7 @@ home = [[sg.Button("Start Display", button_color="green"), sg.Button("End Sessio
 dataDisplay = [
     [sg.Button("End Display", button_color="red")],
     [sg.Text("Location Data", justification="center", font=('Arial Bold', 20))],
+    [sg.Text("Number of Satellites Connected: ", justification="left"), sg.Text(x, key='sat')],
     [sg.Text("X Acceleration (m/s²): ", justification="left"), sg.Text(x, key='accelX'), sg.Text("Y Acceleration (m/s²): ", justification="center"), sg.Text(x, key='accelY'), sg.Text("Z Acceleration (m/s²): ", justification="right"), sg.Text(x, key='accelZ')],
     #[sg.Text("Y Acceleration: ", justification="left"), sg.Text(x, key='accelY')],
     #[sg.Text("Z Acceleration: ", justification="left"), sg.Text(x, key='accelZ')],
@@ -23,7 +24,7 @@ dataDisplay = [
     [sg.Text("X Magnetic Field (µT): ", justification="left"), sg.Text(x, key='magX'), sg.Text("Y Magnetic Field (µT): ", justification="left"), sg.Text(x, key='magY'), sg.Text("Z Magnetic Field (µT): ", justification="left"), sg.Text(x, key='magZ')],
     #[sg.Text("Y Magnetic Field: ", justification="left"), sg.Text(x, key='magY')],
     #[sg.Text("Z Magnetic Field: ", justification="left"), sg.Text(x, key='magZ')],
-    [sg.Text("Latitude: ", justification="left"), sg.Text(x, key='lat'), sg.Text("Longitude: ", justification="left"), sg.Text(x, key='lng')]]
+    [sg.Text("Latitude: ", justification="left"), sg.Text(x, key='lat'), sg.Text("Longitude: ", justification="left"), sg.Text(x, key='lng'), sg.Text("Altitude: ", justification="left"), sg.Text(x, key='alt')]]
     #[sg.Text("Longitude: ", justification="left"), sg.Text(x, key='lng')]]
 layout = [[sg.Column(home, key='-COL1-'), sg.Column(dataDisplay, visible=False, key='-COL2-')]]
 window = sg.Window("Serial Display GUI", layout, margins=(200,100))
@@ -54,27 +55,31 @@ while True:
         x = s
         #print(x)
         if count == 1:
-            window['accelX'].update(x)
+            window['sat'].update(x)
         elif count == 2:
-            window['accelY'].update(x)
+            window['accelX'].update(x)
         elif count == 3:
-            window['accelZ'].update(x)
+            window['accelY'].update(x)
         elif count == 4:
-            window['gyroX'].update(x)
+            window['accelZ'].update(x)
         elif count == 5:
-            window['gyroY'].update(x)
+            window['gyroX'].update(x)
         elif count == 6:
-            window['gyroZ'].update(x)
+            window['gyroY'].update(x)
         elif count == 7:
-            window['magX'].update(x)
+            window['gyroZ'].update(x)
         elif count == 8:
-            window['magY'].update(x)
+            window['magX'].update(x)
         elif count == 9:
-            window['magZ'].update(x)
+            window['magY'].update(x)
         elif count == 10:
-            window['lat'].update(x)
+            window['magZ'].update(x)
         elif count == 11:
+            window['lat'].update(x)
+        elif count == 12:
             window['lng'].update(x)
+        elif count == 13:
+            window['alt'].update(x)
 
         s = ""
         count += 1
