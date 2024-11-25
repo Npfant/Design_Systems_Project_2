@@ -7,9 +7,9 @@
 #include <SD.h>
 #include <SPI.h>
  
-SoftwareSerial mySerial(0, 1); // RX, TX
+SoftwareSerial mySerial(7, 8); // RX, TX
 TinyGPSPlus gps;
-SoftwareSerial gpsSerial(7, 8);
+SoftwareSerial gpsSerial(0, 1);
 Adafruit_BNO055 bno = Adafruit_BNO055();
 sensors_event_t event;
 const int chipSelect = BUILTIN_SDCARD;
@@ -170,4 +170,55 @@ void loop()
     Serial.println("Error opening datalog.csv");
   }
   }}
+  else{
+    bno.getEvent(&event, Adafruit_BNO055::VECTOR_ACCELEROMETER);
+  accelX = event.acceleration.x;
+  accelY = event.acceleration.y;
+  accelZ = event.acceleration.z;
+
+    // Read gyroscope (angular velocity) data
+  bno.getEvent(&event, Adafruit_BNO055::VECTOR_GYROSCOPE);
+  gyroX = event.gyro.x;
+  gyroY = event.gyro.y;
+  gyroZ = event.gyro.z;
+
+    // Read magnetometer data
+  bno.getEvent(&event, Adafruit_BNO055::VECTOR_MAGNETOMETER);
+  magX = event.magnetic.x;
+  magY = event.magnetic.y;
+  magZ = event.magnetic.z;
+
+  Serial.println("S");
+  mySerial.println("S");
+  portPrint(sat);
+  portPrint(accelX);
+  portPrint(accelY);
+  portPrint(accelZ);
+  portPrint(gyroX);
+  portPrint(gyroY);
+  portPrint(gyroZ);
+  portPrint(magX);
+  portPrint(magY);
+  portPrint(magZ);
+  portPrint(lat);
+  portPrint(lng);
+  portPrint(alt);
+
+  File dataFile = SD.open("datalog.csv", FILE_WRITE);
+
+  // if the file is available, write to it:
+  if (dataFile) {
+    dataFile.print(month); dataFile.print("/"); dataFile.print(day); dataFile.print("/"); dataFile.print(year); dataFile.print(",");
+    dataFile.print(hour); dataFile.print(":"); dataFile.print(minute); dataFile.print(":"); dataFile.print(sec); dataFile.print(",");
+    dataFile.print(accelX); dataFile.print(","); dataFile.print(accelY); dataFile.print(","); dataFile.print(accelZ); dataFile.print(",");
+    dataFile.print(gyroX); dataFile.print(","); dataFile.print(gyroY); dataFile.print(","); dataFile.print(gyroZ); dataFile.print(",");
+    dataFile.print(magX); dataFile.print(","); dataFile.print(magY); dataFile.print(","); dataFile.print(magZ); dataFile.print(",");
+    dataFile.print(lat); dataFile.print(","); dataFile.print(lng); dataFile.print(","); dataFile.print(alt); dataFile.print(","); dataFile.println(sat);
+
+    dataFile.close();
+  } else {
+    // if the file isn't open, pop up an error:
+    Serial.println("Error opening datalog.csv");
+  }
+  }
 }
